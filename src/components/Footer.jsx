@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="flex items-center justify-evenly">
           <div className="flex flex-col gap-6 w-[30%]">
             <img
-              src="../src/assets/logo-m.svg"
+              src="../src/assets/PostPilot.png"
               alt=""
               width={100}
               height={100}

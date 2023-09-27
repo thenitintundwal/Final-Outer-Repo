@@ -3,22 +3,29 @@ import Login from "./Login";
 import SelectApp from "./SelectApp";
 import { useState, useEffect, useRef } from "react";
 import Typed from "typed.js";
+import { selector, useRecoilValue, useSetRecoilState } from "recoil";
+import { getLogin, getSignUp } from "../../Store/Getters";
+import { checkState } from "../../Store/Variables";
 const Hero = () => {
-  const [isLoginOpen, setLoginOpen] = useState(false);
-  const [isSignUpOpen, setSignUpOpen] = useState(false);
+ 
   const el = useRef(null);
 
+const isSignUpOpen=useRecoilValue(getSignUp);
+const isLoginOpen=useRecoilValue(getLogin);
+
+const setLogin=useSetRecoilState(checkState);
   useEffect(() => {
     const typed = new Typed(el.current, {
-      strings: ["Technical Writing", "Outerbase"], // Strings to display
-      // Speed settings, try diffrent values untill you get good results
+      strings: ["Technical Writing", "Outerbase"], 
       startDelay: 600,
       typeSpeed: 70,
-      backSpeed: 70,
-      
+      // backSpeed: 70,
+      backDelay: 3000,
+      fadeOut: true,
       loop: true,
       showCursor: false,
-      smartBackspace: false,
+      smartBackspace: true
+     
     });
 
     // Destropying
@@ -28,13 +35,12 @@ const Hero = () => {
   }, []);
   return (
     <div
-      id="hero__slide"
-      className="bg-[url('../src/assets/hero-bg-1.jpeg')]  pb-10 lg:mt-[-107px] pt-10 lg:pt-0 overflow-x-hidden"
-    >
-       {/* <SelectApp /> */}
+   className="bg-[url('../src/assets/hero-bg-1.jpeg')]  pb-10 lg:mt-[-107px] pt-10 lg:pt-0 overflow-x-hidden"
+      id="cta_form-03-690461">
+  
 
-      <div className="flex lg:flex-row flex-col items-center lg:gap-14 lg:justify-end lg:pt-44">
-        <div className="text-white lg:w-[40%] px-4 lg:px-0">
+      <div className="flex lg:flex-row flex-col items-center lg:gap-14 lg:justify-end lg:pt-44" >
+        <div className="text-white lg:w-[40%] px-4 lg:px-0" >
           <h1 className="text-[36px] font-[700] lg:text-[72px] leading-[54px] lg:leading-[93.6px]">
             Hight-Quality Way to Write your{" "}
           </h1>
@@ -48,7 +54,12 @@ const Hero = () => {
             create content for blogs, articles, websites, social media and more.
           </p>
           <div className="">
-            <button className="aai-gradient-outline-btn w-[90%] lg:w-[180px] pb-15">
+            <button className="aai-gradient-outline-btn w-[90%] lg:w-[180px] pb-15" onClick={()=>{
+              setLogin({
+                isLoginOpen: false,
+                isSignUpOpen: true
+              })
+            }}>
               Get Started
             </button>
           </div>
@@ -57,10 +68,12 @@ const Hero = () => {
           <img src="../src/assets/dashboard-img.png" alt="" />
         </div>
       </div>
-       {/* <SignUp /> */}
-      {/*  <Login /> */}
+      
       {!isLoginOpen && isSignUpOpen ? (
-        <SignUp setSignUpOpen={setSignUpOpen} />
+        <SignUp />
+      ) : null}
+       {isLoginOpen && !isSignUpOpen ? (
+        <Login />
       ) : null}
     </div>
   );

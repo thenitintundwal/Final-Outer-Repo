@@ -1,6 +1,52 @@
 import { RxCross1 } from "react-icons/rx";
+import { checkState } from "../../Store/Variables";
+import { useSetRecoilState } from "recoil";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { auth } from "../../Firebase/Firebase";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
+const Signup = () => {
+const[email, setEmail]=useState(null);
+const[name, setName]=useState(null);
+const[password, setPassword]=useState(null);
+  const setLogin=useSetRecoilState(checkState);
+const navigate=useNavigate();
+  async function google(){
+    const provider= new GoogleAuthProvider();
+    try{
+      const userCredential=await signInWithPopup(auth, provider);
+      setLogin({
+        isLoginOpen: false,
+        isSignUpOpen: false
+      })
+      navigate("/projectsection")
+    }catch(e){
+      console.log(e);
+    }
+  }
 
-const Signup = ({ setSignUpOpen }) => {
+  async function signUp(event){
+    event.preventDefault();
+    try{
+      const data = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(name);
+      const update=await updateProfile(auth.currentUser, {
+        displayName: name
+      })
+      const response=await signOut(auth);
+      setLogin({
+        isSignUpOpen: false,
+        isLoginOpen: true
+      })
+      // send a toast telling now login to move ahead
+    }catch(e){
+      console.log(e);
+    }
+  }
+  
+  
   return (
     <div className=" flex items-center text-center text-white absolute top-32 left-[35%] z-10">
       <div className=" border-2 border-white bg-[#080E26] rounded-3xl flex flex-col relative">
@@ -8,18 +54,22 @@ const Signup = ({ setSignUpOpen }) => {
           <RxCross1
             className="text-[25px] text-end absolute right-5 top-4"
             onClick={() => {
-              setSignUpOpen(false);
+            
+              setLogin({
+                isLoginOpen: false,
+                isSignUpOpen: false
+              })
             }}
           />
           <div>
-            <h1 className="text-[36px] font-[600] leading-[48px] text-center text-white pt-10">
+            <h1 className="text-[36px] font-[600] leading-[48px] text-center text-white pt-10" >
               Sign up for an account
             </h1>
             <p className="text-[18px] font-[400] leading-[27px] text-gray-400 text-center ">
               Send, spend and save smarter
             </p>
           </div>
-          <div className="border-2 border-gray-500 my-6 rounded-[20px] flex justify-center gap-4 items-center py-3">
+          <div className="border-2 border-gray-500 my-6 rounded-[20px] flex justify-center gap-4 items-center py-3" onClick={google}>
             <div>
               <svg
                 width="23"
@@ -55,13 +105,18 @@ const Signup = ({ setSignUpOpen }) => {
             </p>
             <hr />
           </div>
-          <form action="" className="flex flex-col gap-7 text-gray-500 py-6">
+          <form action="" className="flex flex-col gap-7 text-gray-500 py-6" onSubmit={signUp}>
             <div className="flex gap-5">
               <input
                 type="text"
                 placeholder="First Name"
                 name="name"
                 className="bg-[#080E26] border-2 border-white py-4 px-2 rounded-[20px]"
+                required
+                onChange={(e)=>{
+                  setName(e.target.value)
+                }}
+                
               />
               <input
                 type="text"
@@ -76,21 +131,34 @@ const Signup = ({ setSignUpOpen }) => {
                 placeholder="Email"
                 name="email"
                 className="bg-[#080E26] border-2 border-white py-4 px-2 rounded-[20px]"
+                required
+                onChange={(e)=>{
+                  setEmail(e.target.value)
+                }}
               />
               <input
                 type="password"
                 placeholder="Password"
                 name="password"
                 className="bg-[#080E26] border-2 border-white py-4 px-2 rounded-[20px]"
+                required
+                onChange={(e)=>{
+                  setPassword(e.target.value)
+                }}
               />
             </div>
-            <button className="pt-10 aai-gradient-outline-btn text-[16px] ">
+            <button className="pt-10 aai-gradient-outline-btn text-[16px] " type="submit">
               Sign up
             </button>
           </form>
           <p className="pb-10 pt-6 text-gray-500">
             Already have an account?{" "}
-            <span className="underline underline-offset-8 text-white text-[16px] cursor-pointer hover:text-orange-400">
+            <span className="underline underline-offset-8 text-white text-[16px] cursor-pointer hover:text-orange-400" onClick={()=>{
+              setLogin({
+                isSignUpOpen: false,
+                isLoginOpen: true
+              })
+            }}>
               Sign In
             </span>
           </p>

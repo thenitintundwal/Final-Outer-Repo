@@ -1,10 +1,13 @@
 import { RxCross1 } from "react-icons/rx";
 
-const SelectApp = () => {
+const SelectApp = ({setProject}) => {
   return (
     <div className="flex items-center text-center text-white absolute top-32 left-[35%] z-10">
       <div className="bg-[#04091E] text-center px-20 w-[30rem] border border-white rounded-3xl relative text-white">
-        <RxCross1 className="text-[25px] text-end absolute right-5 top-4 cursor-pointer" />
+        <RxCross1 className="text-[25px] text-end absolute right-5 top-4 cursor-pointer" onClick={()=>{
+          setProject(false);
+          
+        }} />
 
         <h1 className="text-[55px] font-[700] leading-[52px] py-20">
           Select App
