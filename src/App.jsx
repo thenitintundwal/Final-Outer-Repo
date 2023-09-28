@@ -5,53 +5,61 @@ import Card from "./components/Card";
 import Demo from "./components/Demo";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
-
+import Error from "./components/Error";
 import Navbar from "./components/Navbar";
 import SelectApp from "./components/SelectApp";
 import "./index.css";
 import { auth } from "../Firebase/Firebase";
-import {Outlet, Route, RouterProvider, createBrowserRouter, createRoutesFromChildren, createRoutesFromElements} from "react-router-dom";
+import {
+  Outlet,
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromChildren,
+  createRoutesFromElements,
+} from "react-router-dom";
 import { connectedCredentials } from "../Store/Variables";
 import { onAuthStateChanged } from "firebase/auth";
+import Payment from "./components/Payment";
+import Contact from "./components/Contact";
+import DashBoard from "./components/DashBoard";
+import ManageProfile from "./components/ManageProfile";
 
-
-
-const router=createBrowserRouter(
+const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Nav />}>
       <Route path="/" element={<LandingPage />} />
       <Route path="/projectsection" element={<AddProjects />} />
+      <Route path="/pricing" element={<Payment />} />
+      <Route path="/contactus" element={<Contact />} />
+      <Route path="/projectdashboard" element={<DashBoard />} />
     </Route>
   )
-)
-
+);
 
 function App() {
-  const setUserCredentials=useSetRecoilState(connectedCredentials);
+  const setUserCredentials = useSetRecoilState(connectedCredentials);
   useEffect(() => {
-    const listen = onAuthStateChanged(auth, async(user) => {
-      if (user) { 
+    const listen = onAuthStateChanged(auth, async (user) => {
+      if (user) {
         const id = await auth.currentUser.getIdToken();
         console.log(user.stsTokenManager.accessToken);
         setUserCredentials({
           name: user.displayName,
-          token: id
-        })
-        } else {
-    
+          token: id,
+        });
+      } else {
         setUserCredentials({
           name: null,
-          token: null
-        })
+          token: null,
+        });
       }
     });
-
   }, []);
 
   return (
     <>
       {/* <LandingPage /> */}
-      {/* <AddProjects /> */}
       <RouterProvider router={router} />
       <Footer />
     </>
@@ -62,19 +70,23 @@ export default App;
 function LandingPage() {
   return (
     <>
-      {/* <Navbar /> */}
-      <Hero />
+      {/*  <Hero />
       <Card />
-      <Demo />
-      {/* <Footer /> */}
+      <Demo /> */}
+      {/* <ManageProfile /> */}
+      {/* <AddProjects /> */}
+      <DashBoard />
+      {/* <Payment /> */}
+      {/* <Contact /> */}
+      {/* <Error /> */}
     </>
   );
 }
-function Nav(){
-  return(
+function Nav() {
+  return (
     <>
-    <Navbar />
-    <Outlet />
+      <Navbar />
+      <Outlet />
     </>
-  )
+  );
 }

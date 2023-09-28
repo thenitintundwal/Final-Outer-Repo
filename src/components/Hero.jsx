@@ -7,16 +7,15 @@ import { selector, useRecoilValue, useSetRecoilState } from "recoil";
 import { getLogin, getSignUp } from "../../Store/Getters";
 import { checkState } from "../../Store/Variables";
 const Hero = () => {
- 
   const el = useRef(null);
 
-const isSignUpOpen=useRecoilValue(getSignUp);
-const isLoginOpen=useRecoilValue(getLogin);
+  const isSignUpOpen = useRecoilValue(getSignUp);
+  const isLoginOpen = useRecoilValue(getLogin);
 
-const setLogin=useSetRecoilState(checkState);
+  const setLogin = useSetRecoilState(checkState);
   useEffect(() => {
     const typed = new Typed(el.current, {
-      strings: ["Technical Writing", "Outerbase"], 
+      strings: ["Technical Writing", "Outerbase"],
       startDelay: 600,
       typeSpeed: 70,
       // backSpeed: 70,
@@ -24,8 +23,7 @@ const setLogin=useSetRecoilState(checkState);
       fadeOut: true,
       loop: true,
       showCursor: false,
-      smartBackspace: true
-     
+      smartBackspace: true,
     });
 
     // Destropying
@@ -35,12 +33,11 @@ const setLogin=useSetRecoilState(checkState);
   }, []);
   return (
     <div
-   className="bg-[url('../src/assets/hero-bg-1.jpeg')]  pb-10 lg:mt-[-107px] pt-10 lg:pt-0 overflow-x-hidden"
-      id="cta_form-03-690461">
-  
-
-      <div className="flex lg:flex-row flex-col items-center lg:gap-14 lg:justify-end lg:pt-44" >
-        <div className="text-white lg:w-[40%] px-4 lg:px-0" >
+      className="bg-[url('../src/assets/hero-bg-1.jpeg')]  pb-10 lg:mt-[-107px] pt-10 lg:pt-0 overflow-x-hidden"
+      id="cta_form-03-690461"
+    >
+      <div className="flex lg:flex-row flex-col items-center lg:gap-14 lg:justify-end lg:pt-44">
+        <div className="text-white lg:w-[40%] px-4 lg:px-0">
           <h1 className="text-[36px] font-[700] lg:text-[72px] leading-[54px] lg:leading-[93.6px]">
             Hight-Quality Way to Write your{" "}
           </h1>
@@ -53,28 +50,36 @@ const setLogin=useSetRecoilState(checkState);
             AI Copywriting is revolutionizing the way content is created. AI can
             create content for blogs, articles, websites, social media and more.
           </p>
-          <div className="">
-            <button className="aai-gradient-outline-btn w-[90%] lg:w-[180px] pb-15" onClick={()=>{
-              setLogin({
-                isLoginOpen: false,
-                isSignUpOpen: true
-              })
-            }}>
+          <div className="pb-8 pl-8 lg:pb-0 lg:pl-0">
+            <button
+              className="aai-gradient-outline-btn w-[90%] lg:w-[180px]"
+              onClick={() => {
+                setLogin({
+                  isLoginOpen: false,
+                  isSignUpOpen: true,
+                });
+              }}
+            >
               Get Started
             </button>
           </div>
         </div>
-        <div className="">
-          <img src="../src/assets/dashboard-img.png" alt="" />
+        <div className="px-5 lg:px-0">
+          <img
+            src="../src/assets/dashboard-img.png"
+            className="lg:block hidden"
+            alt=""
+          />
+          <img
+            src="../src/assets/dashboard-img-2.png"
+            className="visible lg:hidden mt-12 lg:mt-0"
+            alt=""
+          />
         </div>
       </div>
-      
-      {!isLoginOpen && isSignUpOpen ? (
-        <SignUp />
-      ) : null}
-       {isLoginOpen && !isSignUpOpen ? (
-        <Login />
-      ) : null}
+
+      {!isLoginOpen && isSignUpOpen ? <SignUp /> : null}
+      {isLoginOpen && !isSignUpOpen ? <Login /> : null}
     </div>
   );
 };
